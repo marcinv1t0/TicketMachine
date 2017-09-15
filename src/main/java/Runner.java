@@ -4,16 +4,12 @@
 public class Runner {
 
     public static void main (String args[]){
+        TicketProvider tickets = new TicketProvider();
         TicketPrinter printer = new TicketPrinter();
-        Ticket ticket1 = new SingleTicket(1.50, true);
-        DiscountCalculator discountCalculator = new DiscountCalculator();
 
-        printer.print(ticket1);
-        ticket1 = new SingleTicket(1.50, false);
-        printer.print(ticket1);
-
-        discountCalculator.applyDiscount(ticket1, 0.35);
-        printer.print(ticket1);
+        for (Ticket ticket: tickets.getAllTickets()){
+            printer.print(ticket);
+        }
 
     }
 

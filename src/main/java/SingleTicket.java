@@ -3,23 +3,24 @@
  */
 public class SingleTicket extends Ticket{
     private boolean isSpecial;
+    private String discount;
 
     public SingleTicket(){
         super(0.0);
         isSpecial = false;
     }
 
-    public SingleTicket(double price, boolean isSpecial){
+    public SingleTicket(boolean isSpecial, double price){
         super(price);
         this.isSpecial = isSpecial;
     }
 
     public String getPrintDetails() {
-        String toPrint, type;
+        String toPrint;
 
-        type = isReduced() ? "Normal" : "Reduced";
+        discount = isReduced() ? "Normal" : "Reduced";
         toPrint = "Price: " + getPrice()+ "\n"
-                + "Type: " + type;
+                + "Type: " + discount;
         if (isSpecial){
             toPrint += "\nSPECIAL TICKET";
         }

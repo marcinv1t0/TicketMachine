@@ -2,41 +2,24 @@
  * Created by m1per on 13.09.2017.
  */
 public class ShortTermTicket extends Ticket{
-    private ValidityTime validityTime;
+    private String validityTime;
 
     public ShortTermTicket(){
         super(0.0);
     }
 
-    public ShortTermTicket(double price, ValidityTime validityTime){
+    public ShortTermTicket(String validityTime, double price){
         super(price);
         this.validityTime = validityTime;
     }
 
     public String getPrintDetails() {
-        String validity, type;
+        String type;
 
-        switch (validityTime) {
-            case M30:
-                validity = "30 min.";
-                break;
-            case M60:
-                validity = "60 min.";
-                break;
-            case M90:
-                validity = "90 min.";
-                break;
-            case H24:
-                validity = "24 hrs";
-                break;
-            default:
-                validity = "";
-                break;
-        }
-        type = isReduced() ? "Normal" : "Reduced";
+        type = isReduced() ? "Reduced" : "Normal";
 
         return "Price: " + getPrice() + "\n"
-                + "Validity: " + validity + "\n"
+                + "Validity: " + validityTime + "\n"
                 + "Type: " + type;
 
     }
