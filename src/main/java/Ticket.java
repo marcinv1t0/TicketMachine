@@ -34,4 +34,6 @@ public abstract class Ticket {
     }
 
     public abstract String getPrintDetails();
+
+    public abstract String getShortInfo();
 }

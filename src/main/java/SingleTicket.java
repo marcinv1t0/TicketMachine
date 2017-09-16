@@ -28,4 +28,8 @@ public class SingleTicket extends Ticket{
         }
         return toPrint;
     }
+
+    public String getShortInfo() {
+        return isSpecial ? "SPECIAL TCIKET" : "NORMAL TICKET";
+    }
 }

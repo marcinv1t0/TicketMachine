@@ -10,6 +10,10 @@ public class ShortTermTicket extends Ticket{
         super(new BigDecimal("0.0"));
     }
 
+    public String getValidityTime() {
+        return validityTime;
+    }
+
     public ShortTermTicket(String validityTime, BigDecimal price){
         super(price);
         this.validityTime = validityTime;
@@ -24,5 +28,9 @@ public class ShortTermTicket extends Ticket{
                 + "Validity: " + validityTime + "\n"
                 + "Type: " + type;
 
+    }
+
+    public String getShortInfo() {
+        return validityTime;
     }
 }
