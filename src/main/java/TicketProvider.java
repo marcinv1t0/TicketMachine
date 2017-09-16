@@ -1,3 +1,4 @@
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,12 +30,12 @@ public class TicketProvider {
     }
 
     private void initializeList() {
-        shortTimeTickets.add(new ShortTermTicket("30 min", 3.0));
-        shortTimeTickets.add(new ShortTermTicket("60 min.", 4.5));
-        shortTimeTickets.add(new ShortTermTicket("90 min.", 6.0));
-        shortTimeTickets.add(new ShortTermTicket("24 hrs.", 11.0));
+        shortTimeTickets.add(new ShortTermTicket("30 min", new BigDecimal("3.0")));
+        shortTimeTickets.add(new ShortTermTicket("60 min.", new BigDecimal("4.5")));
+        shortTimeTickets.add(new ShortTermTicket("90 min.", new BigDecimal("6.0")));
+        shortTimeTickets.add(new ShortTermTicket("24 hrs.", new BigDecimal("11.0")));
 
-        singleTickets.add(new SingleTicket(false, 3.0));
-        singleTickets.add(new SingleTicket(true, 3.2));
+        singleTickets.add(new SingleTicket(false, new BigDecimal("3.0")));
+        singleTickets.add(new SingleTicket(true, new BigDecimal("3.2")));
     }
 }

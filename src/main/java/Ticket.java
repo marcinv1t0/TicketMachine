@@ -1,20 +1,22 @@
+import java.math.BigDecimal;
+
 /**
  * Created by m1per on 13.09.2017.
  */
 public abstract class Ticket {
-    private double price;
+    private BigDecimal price;
     private boolean isReduced;
 
-    public Ticket(double price){
+    public Ticket(BigDecimal price){
         this.price = price;
         isReduced = false;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

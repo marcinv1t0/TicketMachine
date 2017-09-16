@@ -1,3 +1,5 @@
+import java.math.BigDecimal;
+
 /**
  * Created by m1per on 14.09.2017.
  */
@@ -6,11 +8,11 @@ public class SingleTicket extends Ticket{
     private String discount;
 
     public SingleTicket(){
-        super(0.0);
+        super(new BigDecimal("0.0"));
         isSpecial = false;
     }
 
-    public SingleTicket(boolean isSpecial, double price){
+    public SingleTicket(boolean isSpecial, BigDecimal price){
         super(price);
         this.isSpecial = isSpecial;
     }
