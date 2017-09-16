@@ -19,11 +19,15 @@ public class TicketVendingMachine {
         return ticketProvider.getTimeTickets();
     }
 
-    public List<Ticket> getAllTickets() { return ticketProvider.getAllTickets(); }
+    public List<Ticket> getAllTickets() {
+        return ticketProvider.getAllTickets();
+    }
 
-    public void print(Ticket ticket){ ticketPrinter.print(ticket); }
+    public void print(Ticket ticket) {
+        ticketPrinter.print(ticket);
+    }
 
-    public HashMap<BigDecimal, Integer> calculateChange(BigDecimal inputAmount, BigDecimal summedPrice){
+    public HashMap<BigDecimal, Integer> calculateChange(BigDecimal inputAmount, BigDecimal summedPrice) {
         return currencyOperationsProvider.calculateChange(inputAmount, summedPrice);
     }
 
@@ -39,5 +43,15 @@ public class TicketVendingMachine {
         return currencyProvider.getAvailableCurrency();
     }
 
+    public boolean isChangeReturnPossible() {
+        return currencyOperationsProvider.isChangeReturnPossible();
+    }
 
+    public boolean isChangeFromAmountPossible(BigDecimal amount) {
+        return currencyOperationsProvider.isChangeFromAmountPossible(amount);
+    }
+
+    public BigDecimal calculatePossibleChangeAmount(HashMap<BigDecimal, Integer> currencyToReturn) {
+        return currencyOperationsProvider.calculatePossibleChangeAmount(currencyToReturn);
+    }
 }

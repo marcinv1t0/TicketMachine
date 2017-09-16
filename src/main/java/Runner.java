@@ -34,6 +34,10 @@ public class Runner {
         BigDecimal summedPrice, inputAmount;
         inputAmount = BigDecimal.ZERO;
 
+        if(!ticketMachine.isChangeReturnPossible()){
+            System.out.println("There may be a problem with change return due to\ntemporary unavailability of some coins");
+        }
+
         System.out.println("1. Bilety czasowe \n2. Bilety jednorazowe");
         menuInput = Integer.parseInt(scanner.nextLine());
 
@@ -68,9 +72,20 @@ public class Runner {
             inputAmount = inputAmount.add(ticketMachine.getAvailableCurrency().get(menuInput));
         }
 
-
         currencyToReturn = ticketMachine.calculateChange(inputAmount, summedPrice);
+
+        if (!ticketMachine.isChangeFromAmountPossible(summedPrice)){
+            BigDecimal possibleReturn = ticketMachine.calculatePossibleChangeAmount(currencyToReturn);
+            System.out.println("Currently it is impossible to return full change for\nselected ticket(s) " +
+                    "closest possible return is " + possibleReturn);
+            System.out.println("1. Continue 2. Cancel operation");
+            menuInput = Integer.parseInt(scanner.nextLine());
+            if (menuInput == 2){
+                currencyToReturn = ticketMachine.calculateChange(inputAmount, BigDecimal.ZERO);
+            }
+        }
         displayReturnedCurrency(currencyToReturn);
+
 
 
     }
