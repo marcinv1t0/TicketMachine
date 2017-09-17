@@ -81,4 +81,12 @@ public class TicketVendingMachine {
         return propertiesProvider.getProperty("discount");
     }
 
+    public boolean isPrintPossible(int printCount){
+        return ticketPrinter.getInkLevel() >= printCount;
+    }
+
+    public int getInkLevel(){
+        return ticketPrinter.getInkLevel();
+    }
+
     }

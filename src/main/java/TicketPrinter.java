@@ -16,5 +16,7 @@ public class TicketPrinter {
         System.out.println("**");
         System.out.println(ticket);
         System.out.println("**");
+        inkLevel--;
+
     }
 }

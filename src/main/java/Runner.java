@@ -22,15 +22,21 @@ public class Runner {
     }
 
     private static void displayReturnedCurrency(TreeMap<BigDecimal, Integer> coinsToReturn) {
-        for (Map.Entry<BigDecimal, Integer> curr :coinsToReturn.entrySet()) {
-            if ( curr.getValue() > 0 )
-            System.out.println(curr.getKey() + " count: " + curr.getValue());
+        if (coinsToReturn.isEmpty()){
+            System.out.println("-----");
+        }else{
+            for (Map.Entry<BigDecimal, Integer> curr :coinsToReturn.entrySet()) {
+                if ( curr.getValue() > 0 )
+                    System.out.println(curr.getKey() + " count: " + curr.getValue());
+            }
         }
+
 
 
     }
 
     public static void main (String args[]){
+        final int DEFAULT_INVALID_INPUT = -1;
         TicketVendingMachine ticketMachine = new TicketVendingMachine();
         Scanner scanner = new Scanner(System.in);
         int menuInput;
@@ -38,24 +44,26 @@ public class Runner {
         TreeMap<BigDecimal, Integer> currencyToReturn = new TreeMap<BigDecimal, Integer>();
         BigDecimal summedPrice, inputAmount, ticketPrice;
 
-        /*if(!ticketMachine.isChangeReturnPossible()){
-            System.out.println("There may be a problem with change return due to\ntemporary unavailability of some coins");
-        }*/
-
-        // SINGLE/TIME SELECTION
 
         while(true){
-            System.out.println("1. Bilety czasowe \n2. Bilety jednorazowe");
-            menuInput = -1;
+            System.out.println("\n\n");
+            System.out.println("WELCOME!\nPlease navigate by entering integer values assigned to menu options.");
+            System.out.println("\n\n");
+
+            /////////////////////////////SHORT TERM TICKETS / SINGLE TICKETS SELECTION /////////////////////////////////
+
+            System.out.println("1. SHORT-TERM TICKETS \n2. SINGLE TICKETS");
+            menuInput = DEFAULT_INVALID_INPUT;
             while (menuInput < 1 || menuInput > 2){
+                System.out.print("Select option: ");
                 while (!scanner.hasNextInt()) {
-                    System.out.println("Wybrano niepoprawną pozycję");
+                    System.out.print("\nPlease, enter integer value!\nSelect option: ");
                     scanner.next();
                 }
                 if (scanner.hasNextInt()){
                     menuInput = scanner.nextInt();
                     scanner.nextLine();
-                    if (menuInput < 1 || menuInput > 2){ System.out.println("Wybrano niepoprawną pozycję"); }
+                    if (menuInput < 1 || menuInput > 2){ System.out.print("\nIncorrect number!\n"); }
                 }
             }
 
@@ -67,37 +75,43 @@ public class Runner {
                     availableTickets = ticketMachine.getSingleTickets();
                     break;
             }
-            displayTickets(availableTickets);
 
-            menuInput = -1;
+            /////////////////////////////////////SPECIFIC TICKET SELECTION//////////////////////////////////////////////
+
+            System.out.println("\n\n");
+            displayTickets(availableTickets);
+            System.out.println();
+            menuInput = DEFAULT_INVALID_INPUT;
             while (menuInput < 1 || menuInput > availableTickets.size()+1){
+                System.out.print("Select option: ");
                 while (!scanner.hasNextInt()) {
-                    System.out.println("Wybrano niepoprawną pozycję");
+                    System.out.print("\nPlease, enter integer value!\nSelect option: ");
                     scanner.next();
                 }
                 if (scanner.hasNextInt()){
                     menuInput = scanner.nextInt();
                     scanner.nextLine();
-                    if (menuInput < 1 || menuInput > availableTickets.size()+1){ System.out.println("Wybrano niepoprawną pozycję"); }
+                    if (menuInput < 1 || menuInput > availableTickets.size()+1){ System.out.print("\nIncorrect number!\n"); }
                 }
             }
             if (menuInput == availableTickets.size()+1) { continue; }
             Ticket ticket = availableTickets.get(menuInput-1);
             ticketPrice = ticket.getPrice();
 
-            // NORMAL/REDUCED SELECTION
-
-            System.out.println("1. Bilet normalny\n2. Bilet ulgowy\n3. Anuluj");
-            menuInput = -1;
+            ////////////////////////////////////NORMAL/REDUCED TICKET SELECTION/////////////////////////////////////////
+            System.out.println("\n\n");
+            System.out.println("1. NORMAL TICKET\n2. REDUCED TICKET\n3. Cancel\n");
+            menuInput = DEFAULT_INVALID_INPUT;
             while (menuInput < 1 || menuInput > 3){
+                System.out.print("Select option: ");
                 while (!scanner.hasNextInt()) {
-                    System.out.println("Wybrano niepoprawną pozycję");
+                    System.out.print("\nPlease, enter integer value!\nSelect option: ");
                     scanner.next();
                 }
                 if (scanner.hasNextInt()){
                     menuInput = scanner.nextInt();
                     scanner.nextLine();
-                    if (menuInput < 1 || menuInput > 3){ System.out.println("Wybrano niepoprawną pozycję"); }
+                    if (menuInput < 1 || menuInput > 3){ System.out.print("\nIncorrect number!\n"); }
                 }
             }
             switch (menuInput){
@@ -107,44 +121,53 @@ public class Runner {
                 case 3:
                     continue;
             }
-            System.out.println(ticketPrice);
 
-            // TICKET COUNT SELECTION
+            // //////////////////////////////////////TICKET COUNT SELECTION/////////////////////////////////////////////
 
-            System.out.println("Liczba biletow: ");
-            menuInput = -1;
+            System.out.println("\n\n");
+            System.out.println("TICKET COUNT");
+            menuInput = DEFAULT_INVALID_INPUT;
 
-            while (menuInput < 0){
+            while (menuInput < 0 || !ticketMachine.isPrintPossible(menuInput)){
+                System.out.print("Enter count: ");
                 while (!scanner.hasNextInt()) {
-                    System.out.println("Prosze wprowadzic LICZBE calkowita");
+                    System.out.print("\nPlease, enter integer value!\nSelect option: ");
                     scanner.next();
                 }
                 if (scanner.hasNextInt()){
                     menuInput = scanner.nextInt();
                     scanner.nextLine();
-                    if (menuInput < 0){ System.out.println("Liczba biletow nie moze byc ujemna"); }
+                    if (menuInput < 0){ System.out.print("\nNumber cannot be negative\n"); }
+                    if (!ticketMachine.isPrintPossible(menuInput)){
+                        System.out.println("\nCurrently it is impossible to print selected number of tickets.\n" +
+                                "Please, select smaller number." + " Maximum number: " + ticketMachine.getInkLevel() + "\n");
+                    }
                 }
             }
 
-            summedPrice = ticketMachine.calculatePrice(ticketPrice, menuInput);
-            System.out.println(summedPrice);
+            /////////////////////////////////////////////////PAYMENT////////////////////////////////////////////////////
 
-            // PAYMENT
+            System.out.println("\n\n");
+            summedPrice = ticketMachine.calculatePrice(ticketPrice, menuInput);
+            System.out.println("Amount to pay: " + summedPrice);
             inputAmount = BigDecimal.ZERO;
-            System.out.println("Zaplac");
+            System.out.println("VALID COINS:");
+            displayAvailableCurrency(ticketMachine.getAvailableCoinInput());
+            System.out.println("\n");
+
             while (inputAmount.compareTo(summedPrice) == -1){
-                System.out.println("Wprowadzono: " + inputAmount);
-                displayAvailableCurrency(ticketMachine.getAvailableCoinInput());
+                System.out.println("AMOUNT ENTERED: " + inputAmount);
                 menuInput = -1;
                 while (menuInput < 1 || menuInput > ticketMachine.getAvailableCoinInput().size()+1){
+                    System.out.print("Select option: ");
                     while (!scanner.hasNextInt()) {
-                        System.out.println("Wybrano niepoprawną pozycję");
+                        System.out.print("\nPlease, enter integer value!\nSelect option: ");
                         scanner.next();
                     }
                     if (scanner.hasNextInt()){
                         menuInput = scanner.nextInt();
                         scanner.nextLine();
-                        if (menuInput < 1 || menuInput > ticketMachine.getAvailableCoinInput().size()+1){ System.out.println("Wybrano niepoprawną pozycję"); }
+                        if (menuInput < 1 || menuInput > ticketMachine.getAvailableCoinInput().size()+1){ System.out.print("\nIncorrect number!\n"); }
                     }
                 }
                 if (menuInput == ticketMachine.getAvailableCoinInput().size()+1) { break; }
@@ -154,8 +177,10 @@ public class Runner {
                 ticketMachine.putCoins(selectedCoin , 1);
             }
 
-            currencyToReturn = ticketMachine.calculateChange(inputAmount, summedPrice);
+            ///////////////////////////////////////////CHANGE RETURN///////////////////////////////////////////////////
 
+            System.out.println("\n\n");
+            currencyToReturn = ticketMachine.calculateChange(inputAmount, summedPrice);
             if (!ticketMachine.isChangeFromAmountPossible(inputAmount.subtract(summedPrice))){
                 BigDecimal possibleReturn = ticketMachine.calculatePossibleChangeAmount(currencyToReturn);
                 System.out.println("Currently it is impossible to return full change for\nselected ticket(s) " +
@@ -167,6 +192,7 @@ public class Runner {
                 }
             }
             ticketMachine.returnChange(currencyToReturn);
+            System.out.println("RETURNED COINS:");
             displayReturnedCurrency(currencyToReturn);
         }
 
