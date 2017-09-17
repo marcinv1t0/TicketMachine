@@ -35,7 +35,6 @@ public class Runner {
         List<Ticket> availableTickets = new ArrayList<Ticket>();
         HashMap<BigDecimal, Integer> currencyToReturn = new HashMap<BigDecimal, Integer>();
         BigDecimal summedPrice, inputAmount;
-        inputAmount = BigDecimal.ZERO;
 
         /*if(!ticketMachine.isChangeReturnPossible()){
             System.out.println("There may be a problem with change return due to\ntemporary unavailability of some coins");
@@ -128,6 +127,7 @@ public class Runner {
             System.out.println(summedPrice);
 
             // PAYMENT
+            inputAmount = BigDecimal.ZERO;
             System.out.println("Zaplac");
             while (inputAmount.compareTo(summedPrice) == -1){
                 System.out.println("Wprowadzono: " + inputAmount);
@@ -140,7 +140,6 @@ public class Runner {
                     }
                     if (scanner.hasNextInt()){
                         menuInput = scanner.nextInt();
-                        scanner.nextLine();
                         scanner.nextLine();
                         if (menuInput < 1 || menuInput > ticketMachine.getAvailableCurrency().size()+1){ System.out.println("Wybrano niepoprawną pozycję"); }
                     }
