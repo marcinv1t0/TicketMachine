@@ -5,10 +5,24 @@ import java.util.*;
  * Created by m1per on 14.09.2017.
  */
 public class Runner {
+    private final static int DEFAULT_INVALID_INPUT = -1;
+    private static TicketVendingMachine ticketMachine = new TicketVendingMachine();
+    private static Scanner scanner = new Scanner(System.in);
+    private static List<Ticket> availableTickets = new ArrayList<>();
 
     public static void displayTickets(List<Ticket> tickets){
         for (int i = 0; i < tickets.size(); i++) {
-            System.out.println(i+1 + ". " + tickets.get(i).getShortInfo());
+            System.out.println(i+1 + ". " + tickets.get(i).getShortInfo() + " : "
+                    + tickets.get(i).getPrice());
+        }
+        System.out.println(tickets.size() + 1 + ". Anuluj");
+    }
+
+    public static void displayReducedTickets(List<Ticket> tickets){
+        BigDecimal discount = new BigDecimal(ticketMachine.getDiscountValue());
+        for (int i = 0; i < tickets.size(); i++) {
+            System.out.println(i+1 + ". " + tickets.get(i).getShortInfo() + " : "
+                    + ticketMachine.getReducedPrice(tickets.get(i), discount));
         }
         System.out.println(tickets.size() + 1 + ". Anuluj");
     }
@@ -36,16 +50,14 @@ public class Runner {
     }
 
     public static void main (String args[]){
-        final int DEFAULT_INVALID_INPUT = -1;
-        TicketVendingMachine ticketMachine = new TicketVendingMachine();
-        Scanner scanner = new Scanner(System.in);
-        int menuInput;
-        List<Ticket> availableTickets = new ArrayList<>();
-        TreeMap<BigDecimal, Integer> currencyToReturn = new TreeMap<BigDecimal, Integer>();
-        BigDecimal summedPrice, inputAmount, ticketPrice;
+        int ticketCount;
+        BigDecimal summedPrice, inputAmount, ticketPrice, discount;
+        TreeMap<BigDecimal, Integer> currencyToReturn;
+        boolean closeProgram, reduced;
+        closeProgram = reduced = false;
+        discount = new BigDecimal(ticketMachine.getDiscountValue());
 
-
-        while(true){
+        while(!closeProgram){
             System.out.println("\n\n");
             System.out.println("WELCOME!\nPlease navigate by entering integer values assigned to menu options.");
             System.out.println("\n\n");
@@ -53,7 +65,7 @@ public class Runner {
             /////////////////////////////SHORT TERM TICKETS / SINGLE TICKETS SELECTION /////////////////////////////////
 
             System.out.println("1. SHORT-TERM TICKETS \n2. SINGLE TICKETS");
-            menuInput = DEFAULT_INVALID_INPUT;
+            int menuInput = DEFAULT_INVALID_INPUT;
             while (menuInput < 1 || menuInput > 2){
                 System.out.print("Select option: ");
                 while (!scanner.hasNextInt()) {
@@ -76,28 +88,6 @@ public class Runner {
                     break;
             }
 
-            /////////////////////////////////////SPECIFIC TICKET SELECTION//////////////////////////////////////////////
-
-            System.out.println("\n\n");
-            displayTickets(availableTickets);
-            System.out.println();
-            menuInput = DEFAULT_INVALID_INPUT;
-            while (menuInput < 1 || menuInput > availableTickets.size()+1){
-                System.out.print("Select option: ");
-                while (!scanner.hasNextInt()) {
-                    System.out.print("\nPlease, enter integer value!\nSelect option: ");
-                    scanner.next();
-                }
-                if (scanner.hasNextInt()){
-                    menuInput = scanner.nextInt();
-                    scanner.nextLine();
-                    if (menuInput < 1 || menuInput > availableTickets.size()+1){ System.out.print("\nIncorrect number!\n"); }
-                }
-            }
-            if (menuInput == availableTickets.size()+1) { continue; }
-            Ticket ticket = availableTickets.get(menuInput-1);
-            ticketPrice = ticket.getPrice();
-
             ////////////////////////////////////NORMAL/REDUCED TICKET SELECTION/////////////////////////////////////////
             System.out.println("\n\n");
             System.out.println("1. NORMAL TICKET\n2. REDUCED TICKET\n3. Cancel\n");
@@ -115,12 +105,38 @@ public class Runner {
                 }
             }
             switch (menuInput){
+                case 1:
+                    displayTickets(availableTickets);
+                    reduced = false;
+                    break;
                 case 2:
-                    ticketPrice = ticketMachine.getReducedPrice(ticket, new BigDecimal(ticketMachine.getDiscountValue()));
+                    displayReducedTickets(availableTickets);
+                    reduced = true;
                     break;
                 case 3:
                     continue;
             }
+
+            /////////////////////////////////////SPECIFIC TICKET SELECTION//////////////////////////////////////////////
+
+            System.out.println("\n\n");
+            menuInput = DEFAULT_INVALID_INPUT;
+            while (menuInput < 1 || menuInput > availableTickets.size()+1){
+                System.out.print("Select option: ");
+                while (!scanner.hasNextInt()) {
+                    System.out.print("\nPlease, enter integer value!\nSelect option: ");
+                    scanner.next();
+                }
+                if (scanner.hasNextInt()){
+                    menuInput = scanner.nextInt();
+                    scanner.nextLine();
+                    if (menuInput < 1 || menuInput > availableTickets.size()+1){ System.out.print("\nIncorrect number!\n"); }
+                }
+            }
+            if (menuInput == (availableTickets.size() + 1)) { continue; }
+            Ticket ticket = availableTickets.get(menuInput -1);
+            ticketPrice = reduced ? ticketMachine.getReducedPrice(ticket, discount) : ticket.getPrice();
+
 
             // //////////////////////////////////////TICKET COUNT SELECTION/////////////////////////////////////////////
 
@@ -148,6 +164,7 @@ public class Runner {
             /////////////////////////////////////////////////PAYMENT////////////////////////////////////////////////////
 
             System.out.println("\n\n");
+            ticketCount = menuInput;
             summedPrice = ticketMachine.calculatePrice(ticketPrice, menuInput);
             System.out.println("Amount to pay: " + summedPrice);
             inputAmount = BigDecimal.ZERO;
@@ -157,7 +174,7 @@ public class Runner {
 
             while (inputAmount.compareTo(summedPrice) == -1){
                 System.out.println("AMOUNT ENTERED: " + inputAmount);
-                menuInput = -1;
+                menuInput = DEFAULT_INVALID_INPUT;
                 while (menuInput < 1 || menuInput > ticketMachine.getAvailableCoinInput().size()+1){
                     System.out.print("Select option: ");
                     while (!scanner.hasNextInt()) {
@@ -172,9 +189,15 @@ public class Runner {
                 }
                 if (menuInput == ticketMachine.getAvailableCoinInput().size()+1) { break; }
 
-                BigDecimal selectedCoin = ticketMachine.getAvailableCoinInput().get(menuInput-1);
+                BigDecimal selectedCoin = ticketMachine.getAvailableCoinInput().get(menuInput -1);
                 inputAmount = inputAmount.add(selectedCoin);
                 ticketMachine.putCoins(selectedCoin , 1);
+            }
+
+            ////////////////////////////////////////////////PRINT///////////////////////////////////////////////////////
+
+            for (int i = 0; i < ticketCount; i++){
+                ticketMachine.print(ticket);
             }
 
             ///////////////////////////////////////////CHANGE RETURN///////////////////////////////////////////////////
@@ -194,12 +217,35 @@ public class Runner {
             ticketMachine.returnChange(currencyToReturn);
             System.out.println("RETURNED COINS:");
             displayReturnedCurrency(currencyToReturn);
+
+            System.out.println("\n");
+            menuInput = DEFAULT_INVALID_INPUT;
+            System.out.println("CLOSE PROGRAM? 1/0");
+            while (menuInput < 0 || menuInput > 1){
+                System.out.print("Select option: ");
+                while (!scanner.hasNextInt()) {
+                    System.out.print("\nPlease, enter integer value!\nSelect option: ");
+                    scanner.next();
+                }
+                if (scanner.hasNextInt()){
+                    menuInput = scanner.nextInt();
+                    scanner.nextLine();
+                    if (menuInput < 0 || menuInput > 1){ System.out.print("\nIncorrect number!\n"); }
+                }
+            }
+            switch (menuInput){
+                case 1 :
+                    closeProgram = true;
+                    break;
+                case 2 :
+                    closeProgram = false;
+            }
         }
-
-
 
     }
 
-
-
 }
+
+
+
+

@@ -37,44 +37,11 @@ public class CurrencyOperationsProvider {
 
     public BigDecimal calculateChangeAmount(TreeMap<BigDecimal, Integer> currencyToReturn){
         BigDecimal changeAmount = BigDecimal.ZERO;
-        Iterator it = currencyToReturn.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            changeAmount = changeAmount.add(((BigDecimal) pair.getKey()).multiply(new BigDecimal((Integer) pair.getValue())));
+        for (Map.Entry<BigDecimal, Integer> curr : currencyToReturn.entrySet()) {
+            changeAmount = changeAmount.add((curr.getKey()).multiply(new BigDecimal( curr.getValue())));
         }
         return changeAmount;
     }
-
-    /* Probalby has no point, to remove in future commits
-    public boolean isChangeReturnPossible(){
-        CurrencyProvider currencyProvider = new CurrencyProvider();
-        TicketProvider ticketProvider = new TicketProvider();
-        List<BigDecimal> availableCurrency = currencyProvider.getAvailableCoinInput();
-        List<Ticket> availableTickets = ticketProvider.getAllTickets();
-        BigDecimal smallestDenomination;
-        Ticket reducedTicket;
-
-        if (!availableCurrency.isEmpty()){
-            smallestDenomination = availableCurrency.get(0);
-        }else{
-            return false;
-        }
-
-        for (BigDecimal value : availableCurrency ){
-            smallestDenomination = (value.compareTo(smallestDenomination) == -1) ? value : smallestDenomination;
-        }
-
-        for (Ticket ticket : availableTickets ) {
-            if (ticket.getPrice().remainder(smallestDenomination).compareTo(BigDecimal.ZERO) == 1){
-                return false;
-            }
-            getReducedPrice(ticket, new BigDecimal(ticketMachine.getDiscountValue()));
-            if (ticket.getPrice().remainder(smallestDenomination).compareTo(BigDecimal.ZERO) == 1){
-                return false;
-            }
-        }
-        return true;
-    }*/
 
     public boolean isChangeFromAmountPossible(BigDecimal amount){
         TreeMap<BigDecimal, Integer> possibleChange = calculateChange(amount, BigDecimal.ZERO);
@@ -89,7 +56,6 @@ public class CurrencyOperationsProvider {
 
     public BigDecimal getReducedPrice(Ticket ticket, BigDecimal discount){
         BigDecimal price;
-
         price = ticket.getPrice();
         return price.multiply(BigDecimal.ONE.subtract(discount)).setScale(2, BigDecimal.ROUND_HALF_UP);
     }
