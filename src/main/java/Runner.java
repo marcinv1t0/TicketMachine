@@ -1,8 +1,5 @@
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Created by m1per on 14.09.2017.
@@ -24,16 +21,21 @@ public class Runner {
 
     }
 
-    private static void displayReturnedCurrency(HashMap<BigDecimal, Integer> currencyToReturn) {
-        currencyToReturn.forEach((k,v) -> System.out.println(k+" count: "+v));
+    private static void displayReturnedCurrency(TreeMap<BigDecimal, Integer> coinsToReturn) {
+        for (Map.Entry<BigDecimal, Integer> curr :coinsToReturn.entrySet()) {
+            if ( curr.getValue() > 0 )
+            System.out.println(curr.getKey() + " count: " + curr.getValue());
+        }
+
+
     }
 
     public static void main (String args[]){
         TicketVendingMachine ticketMachine = new TicketVendingMachine();
         Scanner scanner = new Scanner(System.in);
         int menuInput;
-        List<Ticket> availableTickets = new ArrayList<Ticket>();
-        HashMap<BigDecimal, Integer> currencyToReturn = new HashMap<BigDecimal, Integer>();
+        List<Ticket> availableTickets = new ArrayList<>();
+        TreeMap<BigDecimal, Integer> currencyToReturn = new TreeMap<BigDecimal, Integer>();
         BigDecimal summedPrice, inputAmount;
 
         /*if(!ticketMachine.isChangeReturnPossible()){
@@ -131,9 +133,9 @@ public class Runner {
             System.out.println("Zaplac");
             while (inputAmount.compareTo(summedPrice) == -1){
                 System.out.println("Wprowadzono: " + inputAmount);
-                displayAvailableCurrency(ticketMachine.getAvailableCurrency());
+                displayAvailableCurrency(ticketMachine.getAvailableCoinInput());
                 menuInput = -1;
-                while (menuInput < 1 || menuInput > ticketMachine.getAvailableCurrency().size()+1){
+                while (menuInput < 1 || menuInput > ticketMachine.getAvailableCoinInput().size()+1){
                     while (!scanner.hasNextInt()) {
                         System.out.println("Wybrano niepoprawną pozycję");
                         scanner.next();
@@ -141,12 +143,14 @@ public class Runner {
                     if (scanner.hasNextInt()){
                         menuInput = scanner.nextInt();
                         scanner.nextLine();
-                        if (menuInput < 1 || menuInput > ticketMachine.getAvailableCurrency().size()+1){ System.out.println("Wybrano niepoprawną pozycję"); }
+                        if (menuInput < 1 || menuInput > ticketMachine.getAvailableCoinInput().size()+1){ System.out.println("Wybrano niepoprawną pozycję"); }
                     }
                 }
-                if (menuInput == ticketMachine.getAvailableCurrency().size()+1) { break; }
+                if (menuInput == ticketMachine.getAvailableCoinInput().size()+1) { break; }
 
-                inputAmount = inputAmount.add(ticketMachine.getAvailableCurrency().get(menuInput-1));
+                BigDecimal selectedCoin = ticketMachine.getAvailableCoinInput().get(menuInput-1);
+                inputAmount = inputAmount.add(selectedCoin);
+                ticketMachine.putCoins(selectedCoin , 1);
             }
 
             currencyToReturn = ticketMachine.calculateChange(inputAmount, summedPrice);
@@ -161,6 +165,7 @@ public class Runner {
                     currencyToReturn = ticketMachine.calculateChange(inputAmount, BigDecimal.ZERO);
                 }
             }
+            ticketMachine.returnChange(currencyToReturn);
             displayReturnedCurrency(currencyToReturn);
         }
 
