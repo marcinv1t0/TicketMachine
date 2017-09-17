@@ -68,7 +68,7 @@ public class CurrencyOperationsProvider {
             if (ticket.getPrice().remainder(smallestDenomination).compareTo(BigDecimal.ZERO) == 1){
                 return false;
             }
-            applyDiscount(ticket, new BigDecimal("0.35"));
+            getReducedPrice(ticket, new BigDecimal(ticketMachine.getDiscountValue()));
             if (ticket.getPrice().remainder(smallestDenomination).compareTo(BigDecimal.ZERO) == 1){
                 return false;
             }
@@ -83,15 +83,14 @@ public class CurrencyOperationsProvider {
         return amount.compareTo(possibleChangeAmount) == 0;
     }
 
-    public BigDecimal calculatePrice(Ticket ticket, int count){
-        return ticket.getPrice().multiply(new BigDecimal(count)).setScale(2, BigDecimal.ROUND_HALF_UP);
+    public BigDecimal calculatePrice(BigDecimal price, int count){
+        return price.multiply(new BigDecimal(count)).setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
-    public void applyDiscount(Ticket ticket, BigDecimal discount){
+    public BigDecimal getReducedPrice(Ticket ticket, BigDecimal discount){
         BigDecimal price;
 
         price = ticket.getPrice();
-        price = price.multiply(BigDecimal.ONE.subtract(discount)).setScale(2, BigDecimal.ROUND_HALF_UP);
-        ticket.setPrice(price);
+        return price.multiply(BigDecimal.ONE.subtract(discount)).setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 }

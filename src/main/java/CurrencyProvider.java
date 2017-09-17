@@ -8,6 +8,8 @@ import java.util.TreeMap;
  * Created by m1per on 16.09.2017.
  */
 public class CurrencyProvider {
+    private static final String COINS_FILEPATH = "./settings/coins.csv";
+
     private static TreeMap<BigDecimal, Integer> availableCoins = new TreeMap<>(Collections.reverseOrder());
 
     public CurrencyProvider(){
@@ -29,7 +31,7 @@ public class CurrencyProvider {
         currentCount += count;
         availableCoins.replace(coin, currentCount);
         CSVWriter writer = new CSVWriter();
-        writer.writeMap("./settings/coins.csv" , availableCoins);
+        writer.writeMap(COINS_FILEPATH , availableCoins);
     }
 
     public void withdrawCoins(BigDecimal coin, int count){
@@ -37,12 +39,12 @@ public class CurrencyProvider {
         CSVWriter writer = new CSVWriter();
         currentCount -= count;
         availableCoins.replace(coin, currentCount);
-        writer.writeMap("./settings/coins.csv" , availableCoins);
+        writer.writeMap(COINS_FILEPATH , availableCoins);
     }
 
     private void initializeProvider(){
         CSVReader reader = new CSVReader();
-        List<String[]> content = reader.getCSVContent("./settings/coins.csv");
+        List<String[]> content = reader.getCSVContent(COINS_FILEPATH);
         for (String[] line: content ) {
             availableCoins.put(new BigDecimal(line[0]), Integer.parseInt(line[1]));
         }

@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CSVReader {
-    private List<String[]> content = new ArrayList<>();
     private static final String COMMA_DELIMITER = ",";
 
     public List<String[]> getCSVContent(String path){
+        List<String[]> content = new ArrayList<>();
         String line;
 
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
@@ -20,8 +20,9 @@ public class CSVReader {
             while ((line = br.readLine()) != null) {
                 String[] singleInput = line.split(COMMA_DELIMITER);
                 content.add(singleInput);
-            }
 
+            }
+            br.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

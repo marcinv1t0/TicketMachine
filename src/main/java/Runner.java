@@ -36,7 +36,7 @@ public class Runner {
         int menuInput;
         List<Ticket> availableTickets = new ArrayList<>();
         TreeMap<BigDecimal, Integer> currencyToReturn = new TreeMap<BigDecimal, Integer>();
-        BigDecimal summedPrice, inputAmount;
+        BigDecimal summedPrice, inputAmount, ticketPrice;
 
         /*if(!ticketMachine.isChangeReturnPossible()){
             System.out.println("There may be a problem with change return due to\ntemporary unavailability of some coins");
@@ -83,6 +83,7 @@ public class Runner {
             }
             if (menuInput == availableTickets.size()+1) { continue; }
             Ticket ticket = availableTickets.get(menuInput-1);
+            ticketPrice = ticket.getPrice();
 
             // NORMAL/REDUCED SELECTION
 
@@ -101,12 +102,12 @@ public class Runner {
             }
             switch (menuInput){
                 case 2:
-                    ticketMachine.applyDiscount(ticket, new BigDecimal("0.35"));
+                    ticketPrice = ticketMachine.getReducedPrice(ticket, new BigDecimal(ticketMachine.getDiscountValue()));
                     break;
                 case 3:
                     continue;
             }
-            System.out.println(ticket.getPrice());
+            System.out.println(ticketPrice);
 
             // TICKET COUNT SELECTION
 
@@ -125,7 +126,7 @@ public class Runner {
                 }
             }
 
-            summedPrice = ticketMachine.calculatePrice(ticket, menuInput);
+            summedPrice = ticketMachine.calculatePrice(ticketPrice, menuInput);
             System.out.println(summedPrice);
 
             // PAYMENT

@@ -11,6 +11,7 @@ public class TicketVendingMachine {
     private TicketPrinter ticketPrinter = new TicketPrinter();
     private CurrencyOperationsProvider currencyOperationsProvider = new CurrencyOperationsProvider();
     private CurrencyProvider currencyProvider = new CurrencyProvider();
+    private PropertiesProvider propertiesProvider = new PropertiesProvider();
 
     public List<Ticket> getSingleTickets() {
         return ticketProvider.getSingleTickets();
@@ -32,12 +33,12 @@ public class TicketVendingMachine {
         return currencyOperationsProvider.calculateChange(inputAmount, summedPrice);
     }
 
-    public BigDecimal calculatePrice(Ticket ticket, int count) {
-        return currencyOperationsProvider.calculatePrice(ticket, count);
+    public BigDecimal calculatePrice(BigDecimal price, int count) {
+        return currencyOperationsProvider.calculatePrice(price, count);
     }
 
-    public void applyDiscount(Ticket ticket, BigDecimal discount) {
-        currencyOperationsProvider.applyDiscount(ticket, discount);
+    public BigDecimal getReducedPrice(Ticket ticket, BigDecimal discount) {
+        return currencyOperationsProvider.getReducedPrice(ticket, discount);
     }
 
     public List<BigDecimal> getAvailableCoinInput() {
@@ -74,6 +75,10 @@ public class TicketVendingMachine {
                 withdrawCoins(curr.getKey(), curr.getValue());
             }
         }
+    }
+
+    public String getDiscountValue(){
+        return propertiesProvider.getProperty("discount");
     }
 
     }
