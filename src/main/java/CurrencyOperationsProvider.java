@@ -13,7 +13,14 @@ public class CurrencyOperationsProvider {
         HashMap<BigDecimal, Integer> currencyToReturn = new HashMap<BigDecimal, Integer>();
         CurrencyProvider currencyProvider = new CurrencyProvider();
         List<BigDecimal> availableCurrency = currencyProvider.getAvailableCurrency();
-        BigDecimal change = inputAmount.subtract(summedPrice);
+        BigDecimal change;
+
+        if (inputAmount.compareTo(summedPrice) == -1){
+            change = inputAmount;
+        }else{
+            change = inputAmount.subtract(summedPrice);
+
+        }
 
         if (!availableCurrency.isEmpty()){
             BigDecimal lowestDenomination = availableCurrency.get(0);
@@ -79,6 +86,9 @@ public class CurrencyOperationsProvider {
             smallestDenomination = availableCurrency.get(0);
         }else{
             return false;
+        }
+        for (BigDecimal value : availableCurrency ){
+            smallestDenomination = (value.compareTo(smallestDenomination) == -1) ? value : smallestDenomination;
         }
         if (amount.remainder(smallestDenomination).compareTo(BigDecimal.ZERO) == 1){
             return false;
