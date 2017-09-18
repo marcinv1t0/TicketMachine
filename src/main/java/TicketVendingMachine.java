@@ -13,6 +13,10 @@ public class TicketVendingMachine {
     private CurrencyProvider currencyProvider = new CurrencyProvider();
     private PropertiesProvider propertiesProvider = new PropertiesProvider();
 
+    public TicketPrinter getTicketPrinter() {
+        return ticketPrinter;
+    }
+
     public List<Ticket> getSingleTickets() {
         return ticketProvider.getSingleTickets();
     }

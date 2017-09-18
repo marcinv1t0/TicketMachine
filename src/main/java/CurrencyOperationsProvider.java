@@ -6,7 +6,7 @@ import java.util.*;
  */
 public class CurrencyOperationsProvider {
 
-    public TreeMap<BigDecimal, Integer> calculateChange(BigDecimal inputAmount, BigDecimal summedPrice){ //DONE
+    public TreeMap<BigDecimal, Integer> calculateChange(BigDecimal inputAmount, BigDecimal summedPrice){
         TreeMap<BigDecimal, Integer> currencyToReturn = new TreeMap<>();
         CurrencyProvider currencyProvider = new CurrencyProvider();
         TreeMap<BigDecimal, Integer> availableCurrency = currencyProvider.getCoinsWithCount();

@@ -23,10 +23,12 @@ public class CurrencyProvider {
     }
 
     public TreeMap<BigDecimal, Integer> getCoinsWithCount(){
+        initializeProvider();
         return availableCoins;
     }
 
     public void putCoins(BigDecimal coin, int count){
+        initializeProvider();
         int currentCount = availableCoins.get(coin);
         currentCount += count;
         availableCoins.replace(coin, currentCount);
@@ -35,6 +37,7 @@ public class CurrencyProvider {
     }
 
     public void withdrawCoins(BigDecimal coin, int count){
+        initializeProvider();
         int currentCount = availableCoins.get(coin);
         CSVWriter writer = new CSVWriter();
         currentCount -= count;
