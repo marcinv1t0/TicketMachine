@@ -49,10 +49,6 @@ public class TicketVendingMachine {
         return currencyProvider.getAvailableCoinInput();
     }
 
-    /*public boolean isChangeReturnPossible() {
-        return currencyOperationsProvider.isChangeReturnPossible();
-    }*/
-
     public boolean isChangeFromAmountPossible(BigDecimal amount) {
         return currencyOperationsProvider.isChangeFromAmountPossible(amount);
     }
@@ -65,32 +61,32 @@ public class TicketVendingMachine {
         return currencyProvider.getCoinsWithCount();
     }
 
-    public void putCoins(BigDecimal coin, int count){
+    public void putCoins(BigDecimal coin, int count) {
         currencyProvider.putCoins(coin, count);
     }
 
-    public void withdrawCoins(BigDecimal coin, int count){
+    public void withdrawCoins(BigDecimal coin, int count) {
         currencyProvider.withdrawCoins(coin, count);
     }
 
     public void returnChange(TreeMap<BigDecimal, Integer> coinsToReturn) {
-        for (Map.Entry<BigDecimal, Integer> curr :coinsToReturn.entrySet()) {
-            if ( curr.getValue() > 0 ){
+        for (Map.Entry<BigDecimal, Integer> curr : coinsToReturn.entrySet()) {
+            if (curr.getValue() > 0) {
                 withdrawCoins(curr.getKey(), curr.getValue());
             }
         }
     }
 
-    public String getDiscountValue(){
+    public String getDiscountValue() {
         return propertiesProvider.getProperty("discount");
     }
 
-    public boolean isPrintPossible(int printCount){
+    public boolean isPrintPossible(int printCount) {
         return ticketPrinter.getInkLevel() >= printCount;
     }
 
-    public int getInkLevel(){
+    public int getInkLevel() {
         return ticketPrinter.getInkLevel();
     }
 
-    }
+}

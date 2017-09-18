@@ -12,7 +12,7 @@ public class CurrencyProvider {
 
     private static TreeMap<BigDecimal, Integer> availableCoins = new TreeMap<>(Collections.reverseOrder());
 
-    public CurrencyProvider(){
+    public CurrencyProvider() {
         initializeProvider();
     }
 
@@ -22,33 +22,33 @@ public class CurrencyProvider {
         return availableCurrencyList;
     }
 
-    public TreeMap<BigDecimal, Integer> getCoinsWithCount(){
+    public TreeMap<BigDecimal, Integer> getCoinsWithCount() {
         initializeProvider();
         return availableCoins;
     }
 
-    public void putCoins(BigDecimal coin, int count){
+    public void putCoins(BigDecimal coin, int count) {
         initializeProvider();
         int currentCount = availableCoins.get(coin);
         currentCount += count;
         availableCoins.replace(coin, currentCount);
         CSVWriter writer = new CSVWriter();
-        writer.writeMap(COINS_FILEPATH , availableCoins);
+        writer.writeMap(COINS_FILEPATH, availableCoins);
     }
 
-    public void withdrawCoins(BigDecimal coin, int count){
+    public void withdrawCoins(BigDecimal coin, int count) {
         initializeProvider();
         int currentCount = availableCoins.get(coin);
         CSVWriter writer = new CSVWriter();
         currentCount -= count;
         availableCoins.replace(coin, currentCount);
-        writer.writeMap(COINS_FILEPATH , availableCoins);
+        writer.writeMap(COINS_FILEPATH, availableCoins);
     }
 
-    private void initializeProvider(){
+    private void initializeProvider() {
         CSVReader reader = new CSVReader();
         List<String[]> content = reader.getCSVContent(COINS_FILEPATH);
-        for (String[] line: content ) {
+        for (String[] line : content) {
             availableCoins.put(new BigDecimal(line[0]), Integer.parseInt(line[1]));
         }
     }

@@ -3,16 +3,16 @@ import java.math.BigDecimal;
 /**
  * Created by m1per on 14.09.2017.
  */
-public class SingleTicket extends Ticket{
+public class SingleTicket extends Ticket {
     private boolean isSpecial;
     private String discount;
 
-    public SingleTicket(){
+    public SingleTicket() {
         super(new BigDecimal("0.0"));
         isSpecial = false;
     }
 
-    public SingleTicket(boolean isSpecial, BigDecimal price){
+    public SingleTicket(boolean isSpecial, BigDecimal price) {
         super(price);
         this.isSpecial = isSpecial;
     }
@@ -21,9 +21,9 @@ public class SingleTicket extends Ticket{
         String toPrint;
 
         discount = isReduced() ? "Normal" : "Reduced";
-        toPrint = "Price: " + getPrice()+ "\n"
+        toPrint = "Price: " + getPrice() + "\n"
                 + "Type: " + discount;
-        if (isSpecial){
+        if (isSpecial) {
             toPrint += "\nSPECIAL TICKET";
         }
         return toPrint;

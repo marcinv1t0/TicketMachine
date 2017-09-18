@@ -7,7 +7,7 @@ public abstract class Ticket {
     private BigDecimal price;
     private boolean isReduced;
 
-    public Ticket(BigDecimal price){
+    public Ticket(BigDecimal price) {
         this.price = price;
         isReduced = false;
     }

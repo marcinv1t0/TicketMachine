@@ -12,11 +12,10 @@ public class TicketPrinter {
         this.inkLevel = inkLevel;
     }
 
-    public void print(Ticket ticket){
+    public void print(Ticket ticket) {
         System.out.println("**");
         System.out.println(ticket);
         System.out.println("**");
         inkLevel--;
-
     }
 }

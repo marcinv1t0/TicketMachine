@@ -17,10 +17,12 @@ public class CSVWriter {
 
         try {
             fileWriter = new FileWriter(path);
-            for (String[] line : content ) {
-                for (int i = 0 ; i < line.length ; i++) {
+            for (String[] line : content) {
+                for (int i = 0; i < line.length; i++) {
                     fileWriter.append(line[i]);
-                    if (i < line.length - 1){ fileWriter.append(COMMA_DELIMITER); }
+                    if (i < line.length - 1) {
+                        fileWriter.append(COMMA_DELIMITER);
+                    }
                 }
                 fileWriter.append(NEW_LINE_SEPARATOR);
             }
@@ -44,7 +46,7 @@ public class CSVWriter {
         try {
             fileWriter = new FileWriter(path);
 
-            for (Map.Entry<BigDecimal , Integer> curr : map.entrySet()) {
+            for (Map.Entry<BigDecimal, Integer> curr : map.entrySet()) {
                 fileWriter.append(curr.getKey().toString());
                 fileWriter.append(COMMA_DELIMITER);
                 fileWriter.append(curr.getValue().toString());

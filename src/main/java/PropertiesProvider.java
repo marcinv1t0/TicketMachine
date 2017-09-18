@@ -10,7 +10,7 @@ public class PropertiesProvider {
     InputStream input = null;
     OutputStream output = null;
 
-    public void setProperty(String property, String value){
+    public void setProperty(String property, String value) {
 
         try {
 
@@ -29,11 +29,10 @@ public class PropertiesProvider {
                     e.printStackTrace();
                 }
             }
-
         }
     }
 
-    public String getProperty(String property){
+    public String getProperty(String property) {
 
         try {
 
@@ -53,7 +52,6 @@ public class PropertiesProvider {
                 }
             }
         }
-
     }
 }
 

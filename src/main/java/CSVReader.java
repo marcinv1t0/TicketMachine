@@ -11,7 +11,7 @@ import java.util.List;
 public class CSVReader {
     private static final String COMMA_DELIMITER = ",";
 
-    public List<String[]> getCSVContent(String path){
+    public List<String[]> getCSVContent(String path) {
         List<String[]> content = new ArrayList<>();
         String line;
 
@@ -20,7 +20,6 @@ public class CSVReader {
             while ((line = br.readLine()) != null) {
                 String[] singleInput = line.split(COMMA_DELIMITER);
                 content.add(singleInput);
-
             }
             br.close();
         } catch (IOException e) {

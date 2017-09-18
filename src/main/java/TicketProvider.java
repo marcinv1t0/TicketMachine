@@ -14,7 +14,7 @@ public class TicketProvider {
     private List<Ticket> shortTimeTickets = new ArrayList<Ticket>();
 
 
-    public TicketProvider(){
+    public TicketProvider() {
         initializeList();
     }
 
@@ -26,22 +26,21 @@ public class TicketProvider {
         return shortTimeTickets;
     }
 
-    public List<Ticket> getAllTickets(){
+    public List<Ticket> getAllTickets() {
         List<Ticket> allTickets = singleTickets;
         allTickets.addAll(shortTimeTickets);
         return allTickets;
-
     }
 
     private void initializeList() {
         CSVReader reader = new CSVReader();
         List<String[]> content = reader.getCSVContent(TIME_TICKETS_FILEPATH);
-        for (String[] line: content ) {
+        for (String[] line : content) {
             shortTimeTickets.add(new ShortTermTicket(line[0], new BigDecimal(line[1])));
         }
 
         content = new ArrayList<>(reader.getCSVContent(SINGLE_TICKETS_FILEPATH));
-        for (String[] line: content ) {
+        for (String[] line : content) {
             singleTickets.add(new SingleTicket(Boolean.valueOf(line[0]), new BigDecimal(line[1])));
         }
     }
