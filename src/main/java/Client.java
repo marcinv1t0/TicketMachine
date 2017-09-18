@@ -4,7 +4,7 @@ import java.util.*;
 /**
  * Created by m1per on 14.09.2017.
  */
-public class Runner {
+public class Client {
     private final static int DEFAULT_INVALID_INPUT = -1;
     private static TicketVendingMachine ticketMachine = new TicketVendingMachine();
     private static Scanner scanner = new Scanner(System.in);
@@ -194,11 +194,6 @@ public class Runner {
                 ticketMachine.putCoins(selectedCoin , 1);
             }
 
-            ////////////////////////////////////////////////PRINT///////////////////////////////////////////////////////
-
-            for (int i = 0; i < ticketCount; i++){
-                ticketMachine.print(ticket);
-            }
 
             ///////////////////////////////////////////CHANGE RETURN///////////////////////////////////////////////////
 
@@ -233,6 +228,13 @@ public class Runner {
                     if (menuInput < 0 || menuInput > 1){ System.out.print("\nIncorrect number!\n"); }
                 }
             }
+
+            ////////////////////////////////////////////////PRINT///////////////////////////////////////////////////////
+
+            for (int i = 0; i < ticketCount; i++){
+                ticketMachine.print(ticket);
+            }
+
             switch (menuInput){
                 case 1 :
                     closeProgram = true;
